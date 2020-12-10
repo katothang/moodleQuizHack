@@ -1,7 +1,11 @@
-﻿using CefSharp;
+﻿using AngleSharp.Html.Dom;
+using CefSharp;
 using CefSharp.WinForms;
+using HtmlAgilityPack;
+using mshtml;
 using System;
 using System.Collections.Generic;
+using Fizzler.Systems.HtmlAgilityPack;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -12,19 +16,25 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using GetAnswer.Model;
 
 namespace GetAnswer
 {
     public partial class Home : Form
     {
+        HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
         public bool isGo = false;
         public ChromiumWebBrowser browser;
+        List<QuestionDTO> lstQuestion = new List<QuestionDTO>();
         public void InitBrowser()
         {
             Cef.Initialize(new CefSettings());
             browser = new ChromiumWebBrowser("https://tnu.aum.edu.vn");
             this.panelHome.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
+            
+
+
         }
         public Home()
         {
@@ -32,6 +42,7 @@ namespace GetAnswer
             InitBrowser();
             browser.FrameLoadEnd += WebBrowserFrameLoadEnded;
             this.browser.AddressChanged += Browser_AddressChanged;
+            browser.LoadingStateChanged += OnLoadingStateChanged;
         }
 
         private void WebBrowserFrameLoadEnded(object sender, FrameLoadEndEventArgs e)
@@ -56,17 +67,24 @@ namespace GetAnswer
                     "}\r\n" +
                     "\r\n" +
                     "document.getElementsByTagName('html')[0].innerHTML =  getJson();";
-                browser.ExecuteScriptAsync(script);
+                //browser.ExecuteScriptAsync(script);
+
+                 
                 if (e.Frame.IsMain)
                 {
+
                     //browser.ViewSource();
                     browser.GetSourceAsync().ContinueWith(taskHtml =>
                     {
+                       
                         var html = taskHtml.Result;
-                        File.WriteAllText(@"json.txt",html.Replace("<!DOCTYPE html><html dir=\"ltr\" lang=\"vi\" xml:lang=\"vi\" class=\"yui3-js-enabled\"><head></head><body>[","[").Replace("]</body></html>","]").Replace("Câu trả lời đúng là:",""));
+                       // doc.LoadHtml(html);
+                        var result = doc.DocumentNode.QuerySelectorAll("div[id^='question']");
+                        //File.WriteAllText(@"json.txt",html.Replace("<!DOCTYPE html><html dir=\"ltr\" lang=\"vi\" xml:lang=\"vi\" class=\"yui3-js-enabled\"><head></head><body>[","[").Replace("]</body></html>","]").Replace("Câu trả lời đúng là:",""));
                         isGo = false;
                     });
                 }
+
 
 
 
@@ -165,6 +183,39 @@ namespace GetAnswer
         {
             Common common = new Common();
             common.LoadJson(@"json.txt");
+        }
+
+
+        private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs args)
+        {
+            if (!args.IsLoading)
+            {
+                browser.GetSourceAsync().ContinueWith(taskHtml =>
+                {
+
+                    var html = taskHtml.Result;
+                    doc.LoadHtml(html);
+                    IEnumerable<HtmlNode> result = doc.DocumentNode.QuerySelectorAll("div[id^='question']");
+                    var resultData = result;
+                    lstQuestion.Clear();
+                    foreach (var item in resultData.ToList())
+                    {
+                        doc.LoadHtml(item.InnerHtml);
+
+                        var question = doc.DocumentNode.SelectNodes("//div[@class='qtext']")[0].InnerHtml.Trim();
+                        var answer = doc.DocumentNode.SelectNodes("//div[@class='rightanswer']")[0].InnerHtml.Replace("Câu trả lời đúng là:", "").Trim();
+                        lstQuestion.Add(new QuestionDTO(question, answer));
+                       
+
+                    }
+                    if(lstQuestion.Count > 0)
+                    {
+                        MessageBox.Show("" + lstQuestion.Count);
+                    }
+                    //File.WriteAllText(@"json.txt",html.Replace("<!DOCTYPE html><html dir=\"ltr\" lang=\"vi\" xml:lang=\"vi\" class=\"yui3-js-enabled\"><head></head><body>[","[").Replace("]</body></html>","]").Replace("Câu trả lời đúng là:",""));
+                    isGo = false;
+                });
+            }
         }
     }
 
