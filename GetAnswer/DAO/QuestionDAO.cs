@@ -31,6 +31,16 @@ namespace GetAnswer.DAO
             }
         }
 
+        public void saveQuestion(QuestionDTO item)
+        {
+            string query = "";
+            if (!isExistQuestion(item))
+            {
+                query = String.Format("INSERT into question(question,answer, name) VALUES(N'{0}', N'{1}', N'{2}')", item.Question, item.Andswer, item.Name);
+                SQLConnect.Instance.executeNonQuery(query);
+            }
+        }
+
         public bool isExistQuestion(QuestionDTO question)
         {
             DataTable data = SQLConnect.Instance.executeQuery(String.Format("select * from question where question = N'{0}' and answer = N'{1}'", question.Question, question.Andswer));

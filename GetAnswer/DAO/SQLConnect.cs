@@ -18,7 +18,7 @@ namespace GetAnswer.DAO
         }
 
         private SQLConnect() { }
-        private string connectionString = @"Data Source=ADMIN\SQLEXPRESS;Initial Catalog=getAnswer;Integrated Security=True";
+        private string connectionString = @"Data Source=V00518\SQLEXPRESS;Initial Catalog=getAnswer;Integrated Security=True";
 
         public DataTable executeQuery(string query, object[] paras = null)
         {

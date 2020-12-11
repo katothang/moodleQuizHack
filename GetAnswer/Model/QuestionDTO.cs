@@ -10,9 +10,12 @@ namespace GetAnswer.Model
     {
         private string question;
         private string andswer;
+        private string name;
+        
 
         public string Question { get => question.Replace("\n"," ").Trim(); set => question = value.Replace("\n", " ").Trim(); }
         public string Andswer { get => andswer.Replace("\n", " ").Trim(); set => andswer = value.Replace("\n", " ").Trim(); }
+        public string Name { get => name; set => name = value; }
 
         public QuestionDTO()
         {
@@ -23,6 +26,13 @@ namespace GetAnswer.Model
         {
             this.question = question;
             this.andswer = andswer;
+        }
+
+        public QuestionDTO(string question, string andswer, string name)
+        {
+            this.question = question;
+            this.andswer = andswer;
+            this.name = name;
         }
     }
 }

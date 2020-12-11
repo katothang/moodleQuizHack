@@ -1,5 +1,7 @@
-﻿using GetAnswer.DAO;
+﻿using Fizzler.Systems.HtmlAgilityPack;
+using GetAnswer.DAO;
 using GetAnswer.Model;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,14 +14,24 @@ namespace GetAnswer
 {
     class Common
     {
-        public void LoadJson(string path)
+        public static List<UrlDTO> LoadUrlCourse(String html)
         {
-            using (StreamReader r = new StreamReader(path))
+            List<UrlDTO> listCourse = new List<UrlDTO>();
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(html);
+            var result = doc.DocumentNode.SelectNodes("//ul[@class='dropdown-menu']")[3].InnerHtml.Trim();
+            HtmlAgilityPack.HtmlDocument doc1 = new HtmlAgilityPack.HtmlDocument();
+            doc1.LoadHtml(result);
+
+            var links = doc1.DocumentNode.SelectNodes("li");
+            foreach(var item in links)
             {
-                string json = r.ReadToEnd();
-                List<QuestionDTO> items = JsonConvert.DeserializeObject<List<QuestionDTO>>(json);
-                QuestionDAO.Instance.saveQuestion(items);
+                var url = item.ChildNodes[0].Attributes["href"].Value;
+                var name = item.ChildNodes[0].Attributes["title"].Value;
+                listCourse.Add(new UrlDTO(url, name));
             }
+
+            return listCourse;
         }
     }
 }

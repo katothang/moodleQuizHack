@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using GetAnswer.Model;
+using GetAnswer.DAO;
 
 namespace GetAnswer
 {
@@ -24,6 +25,7 @@ namespace GetAnswer
     {
         HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
         public bool isGo = false;
+        public bool isStart = true;
         public ChromiumWebBrowser browser;
         List<QuestionDTO> lstQuestion = new List<QuestionDTO>();
         public void InitBrowser()
@@ -43,6 +45,7 @@ namespace GetAnswer
             browser.FrameLoadEnd += WebBrowserFrameLoadEnded;
             this.browser.AddressChanged += Browser_AddressChanged;
             browser.LoadingStateChanged += OnLoadingStateChanged;
+            
         }
 
         private void WebBrowserFrameLoadEnded(object sender, FrameLoadEndEventArgs e)
@@ -181,8 +184,7 @@ namespace GetAnswer
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            Common common = new Common();
-            common.LoadJson(@"json.txt");
+           
         }
 
 
@@ -190,32 +192,53 @@ namespace GetAnswer
         {
             if (!args.IsLoading)
             {
-                browser.GetSourceAsync().ContinueWith(taskHtml =>
+                if (!tbUrl.Text.Contains("login/index.php") && cburlCourse.Items.Count < 1)
                 {
-
-                    var html = taskHtml.Result;
-                    doc.LoadHtml(html);
-                    IEnumerable<HtmlNode> result = doc.DocumentNode.QuerySelectorAll("div[id^='question']");
-                    var resultData = result;
-                    lstQuestion.Clear();
-                    foreach (var item in resultData.ToList())
+                    browser.GetSourceAsync().ContinueWith(taskHtml =>
                     {
-                        doc.LoadHtml(item.InnerHtml);
+                        
+                        var html = taskHtml.Result;
+                        List<UrlDTO> listURL = Common.LoadUrlCourse(html);
+                        cburlCourse.DataSource = listURL;
+                        //cburlCourse.ValueMember = "url";
+                        //cburlCourse.DisplayMember = "name";
+                    });
+                }
+               
 
-                        var question = doc.DocumentNode.SelectNodes("//div[@class='qtext']")[0].InnerHtml.Trim();
-                        var answer = doc.DocumentNode.SelectNodes("//div[@class='rightanswer']")[0].InnerHtml.Replace("Câu trả lời đúng là:", "").Trim();
-                        lstQuestion.Add(new QuestionDTO(question, answer));
-                       
-
-                    }
-                    if(lstQuestion.Count > 0)
+                if (tbUrl.Text.Contains("quiz/review"))
+                {
+                    browser.GetSourceAsync().ContinueWith(taskHtml =>
                     {
-                        MessageBox.Show("" + lstQuestion.Count);
-                    }
-                    //File.WriteAllText(@"json.txt",html.Replace("<!DOCTYPE html><html dir=\"ltr\" lang=\"vi\" xml:lang=\"vi\" class=\"yui3-js-enabled\"><head></head><body>[","[").Replace("]</body></html>","]").Replace("Câu trả lời đúng là:",""));
-                    isGo = false;
-                });
-            }
+                        var html = taskHtml.Result;
+                        doc.LoadHtml(html);
+                        IEnumerable<HtmlNode> result = doc.DocumentNode.QuerySelectorAll("div[id^='question']");
+
+
+
+                        lstQuestion.Clear();
+
+                        for (int i = 0; i < result.ToArray().Length; i++)
+                        {
+                            //get name course 
+                            var course = doc.GetElementbyId("page-navbar");
+                            HtmlAgilityPack.HtmlDocument docCourse = new HtmlAgilityPack.HtmlDocument();
+                            docCourse.LoadHtml(course.InnerHtml);
+                            var courseName = docCourse.DocumentNode.SelectNodes("//a[@itemprop='url']")[1].InnerText;
+
+                            HtmlAgilityPack.HtmlDocument doc1 = new HtmlAgilityPack.HtmlDocument();
+                            doc1.LoadHtml(result.ToList()[i].InnerHtml);
+                            var question = doc1.DocumentNode.SelectNodes("//div[@class='qtext']")[0].InnerHtml.Trim();
+                            var answer = doc1.DocumentNode.SelectNodes("//div[@class='rightanswer']")[0].InnerHtml.Replace("Câu trả lời đúng là:", "").Trim();
+
+                            QuestionDAO.Instance.saveQuestion(new QuestionDTO(question, answer, courseName));
+                        }
+
+                    });
+                }
+                    
+                }
+               
         }
     }
 
