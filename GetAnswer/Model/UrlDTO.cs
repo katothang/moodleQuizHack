@@ -16,6 +16,10 @@ namespace GetAnswer.Model
             this.Url = url;
             this.Name = name;
         }
+        public UrlDTO()
+        {
+            
+        }
 
         public string Url { get => url; set => url = value; }
         public string Name { get => name; set => name = value; }

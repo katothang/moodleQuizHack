@@ -35,8 +35,12 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbPass = new System.Windows.Forms.TextBox();
             this.tbUserName = new System.Windows.Forms.TextBox();
-            this.cburlCourse = new System.Windows.Forms.ComboBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.nbDelay = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelSetting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nbDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHome
@@ -48,7 +52,9 @@
             // 
             // panelSetting
             // 
-            this.panelSetting.Controls.Add(this.cburlCourse);
+            this.panelSetting.Controls.Add(this.label1);
+            this.panelSetting.Controls.Add(this.nbDelay);
+            this.panelSetting.Controls.Add(this.btnStart);
             this.panelSetting.Controls.Add(this.btnGo);
             this.panelSetting.Controls.Add(this.tbUrl);
             this.panelSetting.Controls.Add(this.btnLogin);
@@ -103,13 +109,51 @@
             this.tbUserName.TabIndex = 0;
             this.tbUserName.Text = "trahuongkuti@gmail.com";
             // 
-            // cburlCourse
+            // backgroundWorker1
             // 
-            this.cburlCourse.FormattingEnabled = true;
-            this.cburlCourse.Location = new System.Drawing.Point(13, 121);
-            this.cburlCourse.Name = "cburlCourse";
-            this.cburlCourse.Size = new System.Drawing.Size(179, 21);
-            this.cburlCourse.TabIndex = 12;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(274, 134);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 12;
+            this.btnStart.Text = "Chạy";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // nbDelay
+            // 
+            this.nbDelay.Location = new System.Drawing.Point(139, 137);
+            this.nbDelay.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nbDelay.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nbDelay.Name = "nbDelay";
+            this.nbDelay.Size = new System.Drawing.Size(120, 20);
+            this.nbDelay.TabIndex = 13;
+            this.nbDelay.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 143);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(54, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "time delay";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Home
             // 
@@ -123,6 +167,7 @@
             this.Resize += new System.EventHandler(this.Home_Resize);
             this.panelSetting.ResumeLayout(false);
             this.panelSetting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nbDelay)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -136,7 +181,10 @@
         private System.Windows.Forms.TextBox tbUserName;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TextBox tbUrl;
-        private System.Windows.Forms.ComboBox cburlCourse;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.NumericUpDown nbDelay;
+        private System.Windows.Forms.Label label1;
     }
 }
 

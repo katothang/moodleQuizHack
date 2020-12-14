@@ -18,16 +18,20 @@ using System.Windows.Forms;
 using System.Xml;
 using GetAnswer.Model;
 using GetAnswer.DAO;
+using System.Threading;
 
 namespace GetAnswer
 {
     public partial class Home : Form
     {
+        Boolean isStop = false;
+        static List<UrlDTO> listURL = new List<UrlDTO>(); 
         HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
         public bool isGo = false;
         public bool isStart = true;
         public ChromiumWebBrowser browser;
         List<QuestionDTO> lstQuestion = new List<QuestionDTO>();
+        private BindingSource bds = new BindingSource();
         public void InitBrowser()
         {
             Cef.Initialize(new CefSettings());
@@ -45,7 +49,11 @@ namespace GetAnswer
             browser.FrameLoadEnd += WebBrowserFrameLoadEnded;
             this.browser.AddressChanged += Browser_AddressChanged;
             browser.LoadingStateChanged += OnLoadingStateChanged;
-            
+            bds.DataSource = new List<UrlDTO>();
+            backgroundWorker1.RunWorkerAsync();
+
+
+
         }
 
         private void WebBrowserFrameLoadEnded(object sender, FrameLoadEndEventArgs e)
@@ -190,22 +198,10 @@ namespace GetAnswer
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs args)
         {
+           
             if (!args.IsLoading)
             {
-                if (!tbUrl.Text.Contains("login/index.php") && cburlCourse.Items.Count < 1)
-                {
-                    browser.GetSourceAsync().ContinueWith(taskHtml =>
-                    {
-                        
-                        var html = taskHtml.Result;
-                        List<UrlDTO> listURL = Common.LoadUrlCourse(html);
-                        cburlCourse.DataSource = listURL;
-                        //cburlCourse.ValueMember = "url";
-                        //cburlCourse.DisplayMember = "name";
-                    });
-                }
-               
-
+                
                 if (tbUrl.Text.Contains("quiz/review"))
                 {
                     browser.GetSourceAsync().ContinueWith(taskHtml =>
@@ -239,6 +235,42 @@ namespace GetAnswer
                     
                 }
                
+        }
+
+        private void cburlCourse_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                Thread.Sleep(100);
+                if (!isStop)
+                {
+                    
+                }
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            if (isStop)
+            {
+                isStop = false;
+            }
+            else
+            {
+                isStop = true;
+            }
+
+            btnStart.Text = isStop ? "Chạy" : "Dừng";
         }
     }
 
