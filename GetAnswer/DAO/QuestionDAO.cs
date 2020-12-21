@@ -51,5 +51,35 @@ namespace GetAnswer.DAO
                 
             return false;
         }
+
+        public List<QuestionDTO> getQuestion()
+        {
+            string query = "select * from question";
+
+            DataTable data = SQLConnect.Instance.executeQuery(query);
+
+            List<QuestionDTO> list = new List<QuestionDTO>();
+            foreach (DataRow item in data.Rows)
+            {
+                list.Add(new QuestionDTO(item));
+            }
+
+            return list;
+        }
+
+        public List<QuestionDTO> findQuestion(string question, string name)
+        {
+            string query = String.Format("select * from question where  question = N'{0}' and name= N'{1}'", question, name);
+
+            DataTable data = SQLConnect.Instance.executeQuery(query);
+
+            List<QuestionDTO> list = new List<QuestionDTO>();
+            foreach (DataRow item in data.Rows)
+            {
+                list.Add(new QuestionDTO(item));
+            }
+
+            return list;
+        }
     }
 }

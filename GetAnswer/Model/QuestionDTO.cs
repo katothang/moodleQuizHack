@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,14 @@ namespace GetAnswer.Model
 
         public QuestionDTO()
         {
+
+        }
+
+        public QuestionDTO(DataRow row)
+        {
+            this.Question = row["question"].ToString();
+            this.Andswer = row["answer"].ToString();
+            this.Name = row["name"].ToString();
 
         }
 

@@ -28,19 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelHome = new System.Windows.Forms.Panel();
             this.panelSetting = new System.Windows.Forms.Panel();
+            this.dtgv = new System.Windows.Forms.DataGridView();
+            this.btnQuestion = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.nbCount = new System.Windows.Forms.NumericUpDown();
+            this.btnStart = new System.Windows.Forms.Button();
             this.btnGo = new System.Windows.Forms.Button();
             this.tbUrl = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.tbPass = new System.Windows.Forms.TextBox();
             this.tbUserName = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.btnStart = new System.Windows.Forms.Button();
-            this.nbDelay = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.panelSetting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbCount)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHome
@@ -52,8 +57,10 @@
             // 
             // panelSetting
             // 
+            this.panelSetting.Controls.Add(this.dtgv);
+            this.panelSetting.Controls.Add(this.btnQuestion);
             this.panelSetting.Controls.Add(this.label1);
-            this.panelSetting.Controls.Add(this.nbDelay);
+            this.panelSetting.Controls.Add(this.nbCount);
             this.panelSetting.Controls.Add(this.btnStart);
             this.panelSetting.Controls.Add(this.btnGo);
             this.panelSetting.Controls.Add(this.tbUrl);
@@ -64,6 +71,96 @@
             this.panelSetting.Name = "panelSetting";
             this.panelSetting.Size = new System.Drawing.Size(355, 425);
             this.panelSetting.TabIndex = 1;
+            // 
+            // dtgv
+            // 
+            this.dtgv.AllowUserToAddRows = false;
+            this.dtgv.AllowUserToDeleteRows = false;
+            this.dtgv.AllowUserToOrderColumns = true;
+            this.dtgv.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtgv.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.dtgv.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleVertical;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Orange;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dtgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgv.EnableHeadersVisualStyles = false;
+            this.dtgv.Location = new System.Drawing.Point(3, 213);
+            this.dtgv.Name = "dtgv";
+            this.dtgv.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(71)))), ((int)(((byte)(71)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Orange;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgv.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dtgv.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(71)))), ((int)(((byte)(71)))));
+            this.dtgv.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            this.dtgv.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Orange;
+            this.dtgv.RowTemplate.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+            this.dtgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtgv.Size = new System.Drawing.Size(346, 209);
+            this.dtgv.TabIndex = 42;
+            // 
+            // btnQuestion
+            // 
+            this.btnQuestion.Location = new System.Drawing.Point(262, 184);
+            this.btnQuestion.Name = "btnQuestion";
+            this.btnQuestion.Size = new System.Drawing.Size(75, 23);
+            this.btnQuestion.TabIndex = 15;
+            this.btnQuestion.Text = "Xuất file";
+            this.btnQuestion.UseVisualStyleBackColor = true;
+            this.btnQuestion.Click += new System.EventHandler(this.btnQuestion_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 143);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(54, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "time delay";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // nbCount
+            // 
+            this.nbCount.Location = new System.Drawing.Point(139, 137);
+            this.nbCount.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nbCount.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nbCount.Name = "nbCount";
+            this.nbCount.Size = new System.Drawing.Size(120, 20);
+            this.nbCount.TabIndex = 13;
+            this.nbCount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // btnStart
+            // 
+            this.btnStart.Enabled = false;
+            this.btnStart.Location = new System.Drawing.Point(274, 134);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 12;
+            this.btnStart.Text = "Chạy";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnGo
             // 
@@ -112,48 +209,7 @@
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            // 
-            // btnStart
-            // 
-            this.btnStart.Location = new System.Drawing.Point(274, 134);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
-            this.btnStart.TabIndex = 12;
-            this.btnStart.Text = "Chạy";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // nbDelay
-            // 
-            this.nbDelay.Location = new System.Drawing.Point(139, 137);
-            this.nbDelay.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nbDelay.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nbDelay.Name = "nbDelay";
-            this.nbDelay.Size = new System.Drawing.Size(120, 20);
-            this.nbDelay.TabIndex = 13;
-            this.nbDelay.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 143);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "time delay";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             // 
             // Home
             // 
@@ -167,7 +223,8 @@
             this.Resize += new System.EventHandler(this.Home_Resize);
             this.panelSetting.ResumeLayout(false);
             this.panelSetting.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbDelay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -183,8 +240,10 @@
         private System.Windows.Forms.TextBox tbUrl;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.NumericUpDown nbDelay;
+        private System.Windows.Forms.NumericUpDown nbCount;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnQuestion;
+        private System.Windows.Forms.DataGridView dtgv;
     }
 }
 
